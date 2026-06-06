@@ -1,11 +1,18 @@
+# Redirect HTTP to HTTPS
 server {
     listen 80;
-    listen 443 ssl;
     listen [::]:80;
+    server_name projekpemweb.test;
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS server
+server {
+    listen 443 ssl;
     listen [::]:443 ssl;
     server_tokens off;
 
-    server_name _;
+    server_name projekpemweb.test;
     root /var/www/html/public;
 
     index index.php index.html;

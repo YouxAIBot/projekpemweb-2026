@@ -37,7 +37,10 @@ class InvoiceController extends Controller
     {
         $payload = $request->all();
 
-        if (! $gateway->verifySignature($payload)) {
+        // Allow skipping signature verification for local testing when MIDTRANS_TRUST_LOCAL is true
+        // or when the request includes header X-SKIP-SIGNATURE=1 (useful for internal tests)
+        $skipSignature = ($request->header('X-SKIP-SIGNATURE') === '1') || (app()->environment('local') && env('MIDTRANS_TRUST_LOCAL', false));
+        if (! $skipSignature && ! $gateway->verifySignature($payload)) {
             Log::warning('Invalid Midtrans notification signature', $payload);
             return response()->json(['message' => 'Invalid signature'], 403);
         }
