@@ -1,0 +1,4 @@
+<?php
+namespace App\Filament\Admin\Resources\BannerResource\Pages;
+use App\Filament\Admin\Resources\BannerResource; use Filament\Resources\Pages\ListRecords;
+class ListBanners extends ListRecords { protected static string $resource = BannerResource::class; protected function getHeaderActions(): array { return [\Filament\Actions\CreateAction::make()]; } }

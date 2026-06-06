@@ -1,0 +1,4 @@
+<?php
+namespace App\Filament\Admin\Resources\SupportTicketResource\Pages;
+use App\Filament\Admin\Resources\SupportTicketResource; use Filament\Resources\Pages\ListRecords;
+class ListSupportTickets extends ListRecords { protected static string $resource = SupportTicketResource::class; protected function getHeaderActions(): array { return [\Filament\Actions\CreateAction::make()]; } }
