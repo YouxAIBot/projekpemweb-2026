@@ -51,3 +51,38 @@ Isi `.env` untuk WhatsApp:
 ```env
 FONNTE_TOKEN=token_kamu
 ```
+
+## Midtrans Real Payment Flow
+
+Simulasi pembayaran sudah dihapus. Alur sekarang:
+
+1. User checkout dan klik Bayar Sekarang.
+2. User diarahkan ke halaman pembayaran Midtrans Snap.
+3. Midtrans mengirim webhook ke aplikasi.
+4. Status order berubah otomatis:
+   - `unpaid` = belum bayar / masih pending
+   - `processing` = pembayaran diterima
+   - `success` = pesanan selesai
+5. WhatsApp dikirim otomatis saat status processing dan success.
+
+Tambahkan ke `src/.env`:
+
+```env
+MIDTRANS_SERVER_KEY=SB-Mid-server-xxxxxxxx
+MIDTRANS_CLIENT_KEY=SB-Mid-client-xxxxxxxx
+MIDTRANS_IS_PRODUCTION=false
+MIDTRANS_AUTO_COMPLETE_ORDER=true
+FONNTE_TOKEN=token_fonnte_kamu
+```
+
+Set Payment Notification URL di dashboard Midtrans:
+
+```txt
+https://projekpemweb.test/payment/midtrans/notification
+```
+
+Untuk local testing webhook dari Midtrans, domain lokal harus bisa diakses publik. Pakai ngrok/cloudflared, lalu set URL notifikasi ke URL publik tersebut, contoh:
+
+```txt
+https://xxxx.ngrok-free.app/payment/midtrans/notification
+```

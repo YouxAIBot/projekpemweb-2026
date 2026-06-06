@@ -13,8 +13,8 @@ class CheckoutController extends Controller
         if($game->type==='uid' && empty($data['user_identifier'])) return back()->withErrors(['user_identifier'=>'UID wajib diisi.'])->withInput();
         if($game->type==='login' && (empty($data['game_email']) || empty($data['game_password']))) return back()->withErrors(['game_email'=>'Email dan password game wajib diisi.'])->withInput();
         $fee=$payment->fee_type==='percent' ? (int) ceil($product->price * $payment->fee_value / 100) : $payment->fee_value;
-        $order=Order::create([...$data,'user_id'=>auth()->id(),'game_id'=>$game->id,'topup_type'=>$game->type,'subtotal'=>$product->price,'fee'=>$fee,'discount'=>0,'total'=>$product->price+$fee,'status'=>Order::STATUS_UNPAID]);
-        $pay=$gateway->createPayment($order); $order->update($pay);
+        $order=Order::create([...$data,'user_id'=>auth()->id(),'game_id'=>$game->id,'product_id'=>$product->id,'payment_method_id'=>$payment->id,'topup_type'=>$game->type,'subtotal'=>$product->price,'fee'=>$fee,'discount'=>0,'total'=>$product->price+$fee,'status'=>Order::STATUS_UNPAID]);
+        try { $pay=$gateway->createPayment($order); } catch (\Throwable $e) { report($e); return back()->withErrors(['payment_method_id'=>$e->getMessage()])->withInput(); } $order->update($pay);
         $wa->send($order->whatsapp, "Invoice YouxTopUp\nOrder: {$order->order_id}\nInvoice: {$order->invoice_number}\nProduk: {$game->name} - {$product->name}\nTotal: Rp ".number_format($order->total,0,',','.')."\nLink: ".route('invoice.show',$order->invoice_number));
         return redirect()->route('invoice.show',$order->invoice_number);
     }

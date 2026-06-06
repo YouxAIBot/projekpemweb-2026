@@ -19,4 +19,5 @@ Route::get('/transactions', [StorefrontController::class, 'transactions'])->name
 Route::get('/topup/{game:slug}', [CheckoutController::class, 'show'])->name('checkout.show');
 Route::post('/topup/{game:slug}', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
-Route::post('/invoice/{order}/simulate-success', [InvoiceController::class, 'simulateSuccess'])->name('invoice.simulate-success');
+Route::get('/payment/midtrans/finish', [InvoiceController::class, 'midtransFinish'])->name('payment.midtrans.finish');
+Route::post('/payment/midtrans/notification', [InvoiceController::class, 'midtransNotification'])->name('payment.midtrans.notification');

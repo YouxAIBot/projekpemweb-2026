@@ -40,6 +40,13 @@ return [
         'token' => env('FONNTE_TOKEN'),
     ],
 
+    'midtrans' => [
+        'server_key' => env('MIDTRANS_SERVER_KEY'),
+        'client_key' => env('MIDTRANS_CLIENT_KEY'),
+        'is_production' => env('MIDTRANS_IS_PRODUCTION', false),
+        'auto_complete_order' => env('MIDTRANS_AUTO_COMPLETE_ORDER', true),
+    ],
+
     'tripay' => [
         'merchant_code' => env('TRIPAY_MERCHANT_CODE'),
         'api_key' => env('TRIPAY_API_KEY'),
